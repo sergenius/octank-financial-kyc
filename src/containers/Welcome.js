@@ -45,7 +45,7 @@ export default class Welcome extends Component {
     return (
       <div className="Home">
         <div className="lander">
-          <h1>Welcome {this.props.location.state.nome}</h1>
+          <h1>Welcome {this.props.location.state.name}</h1>
           <br></br>
           <img src="thanos.jpg" height="300" alt="thanos"/>
           <form onSubmit={this.handleConfirmationSubmit}>

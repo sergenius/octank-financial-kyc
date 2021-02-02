@@ -10,9 +10,19 @@ import LoaderButton from "../components/LoaderButton";
 import { Auth } from "aws-amplify";
 import config from "../config";
 import { s3Upload } from "../libs/awsLib";
-import { parserCNH } from "../libs/awsLib";
+//import { parserCNH } from "../libs/awsLib";
 import AWS from "aws-sdk";
 
+
+function signup(email, name,) {
+  return API.put(config.apiGateway.API_NAME, "/signup", {
+    body: {
+      'email': email,
+      'password': null,
+      'name': name,
+    }
+  });
+}
 // Function that returns the file content as base64
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -23,7 +33,7 @@ function getBase64(file) {
   });
 }
 
-// Function that calls the Rekognition's DetectText API for extract info
+/* // Function that calls the Rekognition's DetectText API for extract info
 // from user Identification
 async function DetectText(imageData, email, password, callback) {
   AnonLog();
@@ -46,7 +56,7 @@ async function DetectText(imageData, email, password, callback) {
       callback(texto, email, password);
     }
   });
-}
+} */
 
 //Provides anonymous log on to AWS services
 function AnonLog() {  
@@ -71,7 +81,7 @@ export default class Signup extends Component {
       confirmPassword: "",
       confirmationCode: "",
       newUser: null,
-      nome: ""
+      name: ""
     };
   }
 
@@ -127,11 +137,10 @@ export default class Signup extends Component {
         ua[i] = image.charCodeAt(i);
       }
 
-      var nome = "";
+      var name = "";
 
-      const novoUser = await DetectText(imageBytes, this.state.email, this.state.password, function(texto, email, password){
-        nome =  parserCNH(texto);
-        console.log("Name::: " + nome);
+      const novoUser = await signup(imageBytes, this.state.email, this.state.password, function(texto, email, password){
+        console.log("Name::: " + name);
         console.log("Email::: " + email);
         console.log("Pass::: " + password);
 
@@ -141,7 +150,7 @@ export default class Signup extends Component {
           password: password,
           attributes: 
           {
-            name: nome,
+            name: name,
             'custom:s3-image-object': attachment
           }
         });
@@ -205,6 +214,15 @@ export default class Signup extends Component {
   renderForm() {
     return (
       <form onSubmit={this.handleSubmit}>
+        <FormGroup controlId="name" bsSize="large">
+          <ControlLabel>Name</ControlLabel>
+          <FormControl
+            autoFocus
+            type="name"
+            value={this.state.name}
+            onChange={this.handleChange}
+          />
+        </FormGroup>       
         <FormGroup controlId="email" bsSize="large">
           <ControlLabel>Email</ControlLabel>
           <FormControl
@@ -215,7 +233,7 @@ export default class Signup extends Component {
           />
         </FormGroup>
         <FormGroup controlId="file">
-            <ControlLabel>Documento CNH</ControlLabel>
+            <ControlLabel>Upload a national ID file</ControlLabel>
             <FormControl onChange={this.handleFileChange} type="file" />
           </FormGroup>
         <FormGroup controlId="password" bsSize="large">

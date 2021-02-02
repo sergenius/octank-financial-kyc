@@ -46,5 +46,5 @@ export async function detectText(bytes) {
 }
 
 export function parserCNH(cnh){
-    return cnh.substring((cnh.indexOf("NOME")+4),cnh.indexOf("DO"))
+    return cnh.substring((cnh.indexOf("name")+4),cnh.indexOf("DO"))
 }

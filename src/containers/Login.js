@@ -34,7 +34,7 @@ function sendAuthAnswer(email, answer, session) {
       'answer': answer,
       'session': session
     }
-  });
+  });{}
 }
 
 // Function that parser the IdToken returned after login to get the user info
@@ -128,8 +128,8 @@ export default class Login extends Component {
             if('accessToken' in resp2){
               //const tokens = JSON.parse(resp2.body);
               console.log('JWT:'+ JSON.stringify(parseJwt(resp2.idToken)));
-              const nomeUser = parseJwt(resp2.idToken).name;
-              this.props.history.push({pathname: '/welcome', state: {token: resp2.accessToken, nome: nomeUser}});
+              const nameUser = parseJwt(resp2.idToken).name;
+              this.props.history.push({pathname: '/welcome', state: {token: resp2.accessToken, name: nameUser}});
               this.props.userHasAuthenticated(true);
             }else{
               alert("Erro de autenticação. Favor tentar novamente!");
